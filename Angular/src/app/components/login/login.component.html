@@ -1,0 +1,20 @@
+<div class="container" *ngIf="usuarioLogueado == null">
+    <div class="card">
+      <div class="card-header bg-primary">Login</div>
+      <div class="card-body">
+        <form name="formLogin">
+          <img class="form-control" [src]="'./assets/img/login.png'">
+          <div class="form-group">
+            <label for="nombreDeUsuario">Usuario</label>
+            <input type="text" class="form-control" name="nombreDeUsuario" id="nombreDeUsuario" [(ngModel)]="loginForm.username" required>
+          </div>
+          <div class="form-group">
+              <label for="contrasena">Contraseña</label>
+              <input type="text" class="form-control" name="contrasena" id="contrasena" [(ngModel)]="loginForm.password" required>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-success" (click)="login()">Iniciar sesión</button>
+          </div>
+        </form>
+    </div>
+</div>

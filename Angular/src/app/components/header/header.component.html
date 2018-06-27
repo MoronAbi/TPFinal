@@ -1,0 +1,42 @@
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">   
+    <a class="navbar-brand">Proyecto Final</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
+      <span class="navbar-toggler-icon"></span>    
+    </button>    
+    <div class="navbar-collapse collapse" id="collapsingNavbar">        
+      <ul class="navbar-nav mr-auto">     
+
+        <li class="nav-item" routerLinkActive="active" *ngIf="!authenticationService.userLoggedIn">                
+          <a class="nav-link" href="#" [routerLink]="['']">Login</a>            
+        </li>            
+        <li class="nav-item" routerLinkActive="active" *ngIf="authenticationService.userLoggedIn">                
+            <a class="nav-link" href="#" [routerLink]="['home']">Home</a>            
+        </li>            
+        <li class="nav-item" routerLinkActive="active" *ngIf="authenticationService.userLoggedIn">                
+          <a class="nav-link" href="#" [routerLink]="['']">Transporte</a>            
+        </li>            
+        <li class="nav-item" routerLinkActive="active" *ngIf="authenticationService.userLoggedIn">                
+          <a class="nav-link" href="#" [routerLink]="['']">Mensajes</a>            
+        </li>            
+        <li class="nav-item" routerLinkActive="active" *ngIf="authenticationService.userLoggedIn">                
+          <a class="nav-link" href="#" [routerLink]="['']">Votación</a>            
+        </li>
+        <li class="nav-item" routerLinkActive="active" *ngIf="authenticationService.userLoggedIn">                
+          <a class="nav-link" href="#" [routerLink]="['']">Escuela</a>            
+        </li>
+        <li class="nav-item" routerLinkActive="active" *ngIf="authenticationService.userLoggedIn">                
+          <a class="nav-link" href="#" [routerLink]="['']">Categorias</a>            
+        </li>                                   
+      </ul>     
+      <ul class="navbar-nav ml-auto" *ngIf="authenticationService.userLoggedIn"> 
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdownLogueado" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{authenticationService.nombreLogueado}}</a>
+          <div class="dropdown-menu" aria-labelledby="dropdownLogueado">
+            <a class="dropdown-item" (click)="logout()">Desconectar</a>
+          </div>
+        </li>           
+      </ul>
+    </div>
+  </nav>
+  </header>
