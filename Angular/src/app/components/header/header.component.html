@@ -8,16 +8,16 @@
       <ul class="navbar-nav mr-auto">     
 
         <li class="nav-item" routerLinkActive="active" *ngIf="!authenticationService.userLoggedIn">                
-          <a class="nav-link" href="#" [routerLink]="['']">Login</a>            
+          <a class="nav-link" href="#" [routerLink]="['login']">Login</a>            
         </li>            
         <li class="nav-item" routerLinkActive="active" *ngIf="authenticationService.userLoggedIn">                
             <a class="nav-link" href="#" [routerLink]="['home']">Home</a>            
         </li>            
-        <li class="nav-item" routerLinkActive="active" *ngIf="authenticationService.userLoggedIn">                
-          <a class="nav-link" href="#" [routerLink]="['']">Transporte</a>            
+        <li class="nav-item" routerLinkActive="active" *ngIf="authenticationService.userLoggedIn && authenticationService.usuarioLogueado.perfil == 'administrativo'">                
+          <a class="nav-link" href="#" [routerLink]="['propietarios']">Propietarios</a>            
         </li>            
-        <li class="nav-item" routerLinkActive="active" *ngIf="authenticationService.userLoggedIn">                
-          <a class="nav-link" href="#" [routerLink]="['']">Mensajes</a>            
+        <li class="nav-item" routerLinkActive="active" *ngIf="authenticationService.userLoggedIn  && authenticationService.usuarioLogueado.perfil == 'administrativo'">                
+          <a class="nav-link" href="#" [routerLink]="['locales']">Locales</a>            
         </li>            
         <li class="nav-item" routerLinkActive="active" *ngIf="authenticationService.userLoggedIn">                
           <a class="nav-link" href="#" [routerLink]="['']">Votación</a>            

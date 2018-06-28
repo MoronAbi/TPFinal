@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Usuario } from '../../models/usuario';
 
 @Component({
   selector: 'app-login',
@@ -31,8 +32,10 @@ export class LoginComponent implements OnInit {
           if(user.username != ""){
             this.authenticationService.userLoggedIn = true;
             localStorage.setItem("usuarioLogueado", JSON.stringify(user));
+            localStorage.setItem("perfil", user.perfil);
             this.authenticationService.perfil = user.perfil;
             this.authenticationService.nombreLogueado = user.username;
+            this.authenticationService.usuarioLogueado = new Usuario(user.id, user.email, user.username, "", user.activo, user.perfil);
             this.router.navigateByUrl('home');
           }
 

@@ -7,6 +7,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+
+
+
 /**
  * Propietario controller.
  *
@@ -23,12 +30,16 @@ class PropietarioController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
         $propietarios = $em->getRepository('GaleriaBundle:Propietario')->findAll();
-
-        return $this->render('propietario/index.html.twig', array(
-            'propietarios' => $propietarios,
-        ));
+        $response = new Response();
+        $encoders = array(new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
+        $response->setContent(json_encode(array(
+        'propietarios' => $serializer->serialize($propietarios, 'json'),
+        )));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response; 
     }
 
     /**
@@ -39,22 +50,22 @@ class PropietarioController extends Controller
      */
     public function newAction(Request $request)
     {
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace($data);
+       
         $propietario = new Propietario();
-        $form = $this->createForm('GaleriaBundle\Form\PropietarioType', $propietario);
-        $form->handleRequest($request);
+        $propietario->setApellido($request->request->get('apellido'));
+        $propietario->setNombres($request->request->get('nombres'));
+        $propietario->setDni($request->request->get('dni'));
+        $propietario->setEmail($request->request->get('email'));
+        $propietario->setTelefono($request->request->get('telefono'));
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($propietario);
-            $em->flush();
-
-            return $this->redirectToRoute('propietario_show', array('id' => $propietario->getId()));
-        }
-
-        return $this->render('propietario/new.html.twig', array(
-            'propietario' => $propietario,
-            'form' => $form->createView(),
-        ));
+        $em = $this->getDoctrine()->getManager();    
+        $em->persist($propietario);
+        $em->flush();
+       
+        $result['status'] = 'ok';
+        return new Response(json_encode($result), 200);
     }
 
     /**
@@ -81,21 +92,20 @@ class PropietarioController extends Controller
      */
     public function editAction(Request $request, Propietario $propietario)
     {
-        $deleteForm = $this->createDeleteForm($propietario);
-        $editForm = $this->createForm('GaleriaBundle\Form\PropietarioType', $propietario);
-        $editForm->handleRequest($request);
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace($data);
+        $sn = $this->getDoctrine()->getManager();
+        $prop = $sn->getRepository('GaleriaBundle:Propietario')->find($request->request->get('id'));
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        $prop->setApellido($request->request->get('apellido'));
+        $prop->setNombres($request->request->get('nombres'));
+        $prop->setDni($request->request->get('dni'));
+        $prop->setEmail($request->request->get('email'));
+        $prop->setTelefono($request->request->get('telefono'));
+        $sn->flush();
 
-            return $this->redirectToRoute('propietario_edit', array('id' => $propietario->getId()));
-        }
-
-        return $this->render('propietario/edit.html.twig', array(
-            'propietario' => $propietario,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        $result['status'] = 'ok';
+        return new Response(json_encode($result), 200);
     }
 
     /**
@@ -106,16 +116,14 @@ class PropietarioController extends Controller
      */
     public function deleteAction(Request $request, Propietario $propietario)
     {
-        $form = $this->createDeleteForm($propietario);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($propietario);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('propietario_index');
+        $data = new Propietario;
+        $sn = $this->getDoctrine()->getManager();
+    
+        $prop = $this->getDoctrine()->getRepository('GaleriaBundle:Propietario')->find($propietario);
+        $sn->remove($prop);
+        $sn->flush();
+        $result['status'] = 'ok';
+        return new Response(json_encode($result), 200);
     }
 
     /**

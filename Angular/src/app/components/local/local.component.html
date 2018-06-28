@@ -1,0 +1,106 @@
+<div class="container">
+    <div class="card">
+      <div class="card-header">Agregar local</div>
+      <div class="card-body">
+        <form>
+          <div class="form-group form-inline">
+            <label >Superficie</label>
+            <input id="superficieInput" name="superficieInput" type="number" class="form-control" [(ngModel)]="newLocal.superficie" required>    
+          </div>
+          <div class="form-group form-inline">
+            <label >Habilitado</label>
+            <input id="habilitadoInput" name="habilitadoInput" type="checkbox" class="form-control" [(ngModel)]="newLocal.habilitado" required>    
+          </div>
+          <div class="form-group form-inline">
+            <label >Costo mes</label>
+            <input id="costomesInput" name="costomesInput" type="number" class="form-control" [(ngModel)]="newLocal.costomes" required>    
+          </div>
+          <div class="form-group form-inline">
+            <label >URL IMG</label>
+            <input id="pathimagenInput" name="pathimagenInput" type="text" class="form-control" [(ngModel)]="newLocal.pathimagen" required>    
+          </div>  
+          <div class="form-group form-inline">
+            <label>Alquilado</label>
+            <input id="alqInput" name="alqInput"type="checkbox" class="form-control" [(ngModel)]="newLocal.alquilado" required>    
+          </div>  
+          <button type="submit" (click)="crearLocal()" class="btn btn-info">Guardar</button>
+        </form>
+      </div>
+    </div>
+  
+    <div class="card">
+      <div class="card-header">Locales</div>
+      <div class="card-body">
+        <table class="table table-responsive table-bordered" [mfData]="arrayLocals" #mf="mfDataTable" [mfRowsOnPage]="5">
+          <thead>
+            <th>
+              <mfDefaultSorter by="superficie">Superficie</mfDefaultSorter>
+            </th>    
+            <th> 
+              <mfDefaultSorter by="habilitado">Habilitado</mfDefaultSorter>
+            </th>
+            <th>
+              <mfDefaultSorter by="costomes">Costo mes</mfDefaultSorter>
+            </th>
+            <th>
+              <mfDefaultSorter by="pathimagen">Imagen</mfDefaultSorter>
+            </th>
+            <th>
+              <mfDefaultSorter by="alquilado">Alquilado</mfDefaultSorter>
+            </th>
+            <th>
+              Opciones
+            </th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let loc of mf.data">
+              <td>{{loc.superficie}}m2</td>
+              <td>{{ getHabilitado(loc) }}</td>
+              <td>${{loc.costomes}}</td>
+              <td>{{loc.pathimagen}}</td>
+              <td>{{ getAlquilado(loc) }}</td>            
+              <td><button type="button" class="btn btn-info" (click)="editarLocal(loc, modalEdit)">Modificar</button>
+                <button type="button" class="btn btn-info" (click)="borrarLocal(loc)">Eliminar</button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4">
+                <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+  <ng-template #modalEdit let-c="close">
+    <div class="modal-header">Editando Local: {{editandoLoc.id }}<button class="close" type="close" (click)="c('')">X</button></div>
+    <div class="modal-body">
+      <form id="formEdit" name="formEdit">
+        <div class="form-group form-inline">
+          <label for="superficieEdit">Superficie</label>
+          <input id="superficieEdit" name="superficieEdit" type="number" class="form-control" [(ngModel)]="editandoLoc.superficie" required>    
+        </div>
+        <div class="form-group form-inline">
+          <label for="habilitadoEdit">Habilitado</label>
+          <input id="habilitadoEdit" name="habilitadoEdit" type="checkbox" class="form-control" [(ngModel)]="editandoLoc.habilitado" required>    
+        </div>
+        <div class="form-group form-inline">
+          <label for="costomesEdit">Costo mes</label>
+          <input id="costomesEdit" name="costomesEdit" type="number" class="form-control" [(ngModel)]="editandoLoc.costomes" required>    
+        </div>
+        <div class="form-group form-inline">
+          <label for="pathimagenEdit">URL IMG</label>
+          <input id="pathimagenEdit" name="pathimagenEdit" type="pathimagen" class="form-control" [(ngModel)]="editandoLoc.pathimagen" required>    
+        </div>  
+        <div class="form-group form-inline">
+          <label>Alquilado</label>
+          <input id="alqEdit" name="alqEdit" type="checkbox" class="form-control" [(ngModel)]="editandoLoc.alquilado" required>    
+        </div>  
+        <button type="submit" (click)="actualizarLocal()" class="btn btn-info">Guardar</button>
+      </form>
+    </div>
+    
+  </ng-template>
